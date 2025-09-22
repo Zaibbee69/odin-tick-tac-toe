@@ -53,6 +53,10 @@ const GameBoard = (function () {
     // Method to reset the board
     const resetBoard = function ()
     {
+        document.querySelector(".winner-ctn").classList.remove("show");
+
+        document.querySelector(".tie-ctn").classList.remove("show");
+
         for (let r = 0; r < 3; r ++)
         {
             for (let c = 0; c < 3; c ++)
@@ -72,40 +76,30 @@ function Game(player1, player2)
     // Setting player 1 as current player
     let currentPlayer = player1;
 
-    const playRound = function (row, column)
-    {
-        // First allow players to make a move
-        const success = GameBoard.makeMove(row, column, currentPlayer.getChoice());
+    const playRound = function (row, column) {
+    const success = GameBoard.makeMove(row, column, currentPlayer.getChoice());
+    if (!success) return null;
 
-        // If move failed
-        if (!success)
-        {
-            console.log("Move failed");
-            return;
-        }
+    const placedSymbol = currentPlayer.getChoice();
 
-        // After move is made we check if win or draw
-        const winner = GameBoard.getWinner();
-
-        // if winner declare the winner
-        if (winner) 
-        {
-            currentPlayer.increaseScore();
-            console.log(`You won ${currentPlayer.getName()}! Score: ${currentPlayer.getScore()}`);
-            GameBoard.resetBoard();
-            return;
-        }
-
-        if (GameBoard.isfull())
-        {
-            console.log("It's a Tie");
-            GameBoard.resetBoard();
-            return;
-        }
-    
-        // Change players
-        changePlayer();
+    const winner = GameBoard.getWinner();
+    if (winner) {
+        currentPlayer.increaseScore();
+        document.querySelector(".winner-ctn").classList.add("show");
+        console.log(`You won ${currentPlayer.getName()}! Score: ${currentPlayer.getScore()}`);
+        return placedSymbol;
     }
+
+    if (GameBoard.isfull()) {
+        document.querySelector(".tie-ctn").classList.add("show");
+        console.log("It's a Tie");
+        return placedSymbol;
+    }
+
+    changePlayer();
+    return placedSymbol;
+};
+
 
     // Function to change the current player
     const changePlayer = function ()
@@ -127,7 +121,7 @@ function Game(player1, player2)
 }
 
 // Making a player factory
-function Player(name = "John", choice = "X" )
+function Player(name = "John", choice = "X", avatar )
 {
     let score = 0;
 
@@ -135,13 +129,183 @@ function Player(name = "John", choice = "X" )
     const getName = () => name;
     const getScore = () => score;
     const getChoice = () => choice;
+    const getAvatar = () => avatar;
 
     // Function to increase score
     const increaseScore = () => score ++;
 
-    return { getName, getScore, getChoice, increaseScore };
+    return { getName, getScore, getChoice, getAvatar, increaseScore };
 }
 
-const player1 = Player("John", "X");
-const player2 = Player("Jane", "O");
-const game = Game(player1, player2);
+// --- GameController (Encapsulation) ---
+const GameController = (function () {
+    let players = {};
+    let game = null;
+
+    function handleFormData(e, form1Id, form2Id, menuSelector) {
+        e.preventDefault();
+        
+        const gameDiv = document.querySelector(".player-game");
+        const menu = document.querySelector(menuSelector);
+
+        const p1Data = Object.fromEntries(new FormData(document.getElementById(form1Id)).entries());
+        const p2Data = Object.fromEntries(new FormData(document.getElementById(form2Id)).entries());
+
+        if (p1Data.symbol === p2Data.symbol) {
+            alert("Both players cannot pick the same symbol! Choose different ones.");
+            return;
+        }
+
+        players.player1 = Player(p1Data.name, p1Data.symbol, p1Data.avatar);
+        players.player2 = Player(p2Data.name, p2Data.symbol, p1Data.avatar);
+
+        game = Game(players.player1, players.player2);
+
+        document.querySelector(".player1-name").textContent = p1Data.name;
+        document.querySelector(".player1-symbol").textContent = p1Data.symbol;
+        document.querySelector(".player1-avatar").classList.add(p1Data.avatar);
+
+        document.querySelector(".player2-name").textContent = p2Data.name;
+        document.querySelector(".player2-symbol").textContent = p2Data.symbol;
+        document.querySelector(".player2-avatar").classList.add(p2Data.avatar);
+
+        console.log("Players ready:", players);
+        game.resetGame();
+
+        menu.classList.remove("show");
+        gameDiv.classList.add("show");
+
+        setupBoardEvents();
+    }
+
+    function handleInput(e, inputTitle)
+    {
+        const title = document.querySelector(inputTitle);
+        title.textContent = e.target.value;
+    }
+
+    function handleCharacter(e, charHolderSelector) 
+    {
+        const avatar = e.target.value;               // e.g. "nes-mario"
+        const charHolder = document.querySelector(charHolderSelector);
+
+        // clear previous avatar class if needed
+        charHolder.className = charHolderSelector.replace(".", "");      
+
+        // add the new avatar class
+        charHolder.classList.add(avatar);           
+    }
+
+    function setupBoardEvents() {
+        document.querySelectorAll(".cell").forEach(cell => {
+            cell.textContent = ""; // clear UI
+            cell.addEventListener("click", () => {
+                const row = cell.dataset.row;
+                const col = cell.dataset.col;
+
+                const currentSymbol = game.playRound(row, col);
+
+                if (currentSymbol === "X")
+                    cell.classList.add("is-primary");
+                
+                else
+                    cell.classList.add("is-warning");
+
+                if (currentSymbol) {
+                    cell.textContent = currentSymbol;
+                }
+        }, { once: true });
+    });
+    }
+
+    document.querySelector("#reset-btn").addEventListener("click", () => {
+        GameBoard.resetBoard();
+
+        document.querySelectorAll(".cell").forEach(cell => {
+        cell.textContent = "";
+        cell.className = "cell nes-container nes-btn nes-pointer is-rounded";
+
+        cell.replaceWith(cell.cloneNode(true));
+        });
+
+        setupBoardEvents();
+    });
+
+    function init() {
+        document.querySelector("#player-menu-btn")
+        .addEventListener("click", (e) => handleFormData(e, "player1", "player2", ".player-menu"));
+
+        document.querySelector("#bot-menu-btn")
+        .addEventListener("click", (e) => handleFormData(e, "player", "bot", ".bot-menu"));
+
+        document.querySelector(".player-input").addEventListener("change", (e) => handleInput(e, ".player-title"));
+        document.querySelector(".player-input2").addEventListener("change", (e) => handleInput(e, ".player-title2"));
+        document.querySelector(".player-input3").addEventListener("change", (e) => handleInput(e, ".player-title3"));
+
+        document.querySelector(".player-avatar").addEventListener("change", (e) => handleCharacter(e, ".player-holder"));    
+        document.querySelector(".player-avatar2").addEventListener("change", (e) => handleCharacter(e, ".player-holder2"));    
+        document.querySelector(".player-avatar3").addEventListener("change", (e) => handleCharacter(e, ".player-holder3"));    
+
+    }
+
+    return {
+        init,
+        getPlayers: () => players,
+        getGame: () => game,
+    };
+})();
+
+GameController.init();
+
+function playerMenu()
+{
+    const header = document.querySelector("header");
+    const playerDiv = document.querySelector(".player-menu");
+    header.classList.add("hide");
+    header.addEventListener("animationend", () => {
+        header.style.display = "none";
+        playerDiv.classList.add("show");
+
+    }, { once: true });    
+}
+
+function botMenu()
+{
+    const header = document.querySelector("header");
+    const botDiv = document.querySelector(".bot-menu");
+    header.classList.add("hide");
+    header.addEventListener("animationend", () => {
+        header.style.display = "none";
+        botDiv.classList.add("show");
+
+    }, { once: true });   
+}
+
+
+
+function toggleReset() {
+    const header = document.querySelector("header");
+    const sections = [
+        ".bot-menu",
+        ".player-menu",
+        ".player-game",
+        ".tie-ctn",
+        ".winner-ctn"
+    ];
+
+    // Hide all other sections
+    sections.forEach(sel => {
+        const el = document.querySelector(sel);
+        if (!el) return;
+        el.style.display = "none"; 
+    });
+
+    // Show header again
+    header.style.display = "flex";
+    header.classList.remove("hide");
+    header.classList.add("show");
+
+    // Reset game state
+    GameBoard.resetBoard();
+}
+

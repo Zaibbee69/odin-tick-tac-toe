@@ -1,0 +1,209 @@
+section.tie-ctn, section.winner-ctn, main.player-game, section.bot-menu .bot-selection, section.bot-menu, section.player-menu .player-selection, section.player-menu, header > div > h1.title-intro, header, footer, nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+body {
+  padding-top: 60px;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  background: url("assets/bgd.png") repeat-x;
+  background-size: cover;
+  animation: scrollBg 10s linear infinite;
+}
+
+@keyframes scrollBg {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -1000px 0;
+  }
+}
+nav {
+  position: fixed;
+  height: 60px;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background-color: black;
+}
+nav > h1 {
+  text-align: center;
+  color: white;
+}
+
+footer {
+  flex-direction: column;
+  margin-top: 10rem;
+  padding: 20px;
+  background-color: black;
+}
+
+header {
+  margin-top: 4rem;
+}
+header > .nes-container {
+  background-color: white;
+  padding: 20px;
+}
+header > div > h1.title-intro {
+  gap: 10px;
+  margin: 4rem 1rem;
+}
+header > div > h3.title-choose {
+  margin-top: 4rem;
+  margin-bottom: 1rem;
+}
+
+header.hide {
+  animation: fadeOut 0.3s ease-in forwards;
+}
+
+header.show {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+section.player-menu {
+  display: none;
+  margin-top: 4rem;
+}
+section.player-menu .nes-container {
+  padding: 20px;
+}
+section.player-menu.show {
+  display: flex;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+section.bot-menu {
+  display: none;
+}
+section.bot-menu .nes-container {
+  padding: 20px;
+}
+section.bot-menu.show {
+  display: flex;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+main.player-game {
+  padding: 20px;
+  margin-top: 4rem;
+  display: none;
+  gap: 20px;
+}
+main.player-game > .nes-container {
+  background-color: white;
+}
+main.player-game .tic-ctn {
+  display: grid;
+  grid-template-columns: repeat(3, 80px);
+  grid-template-rows: repeat(3, 80px);
+  gap: 8px;
+  justify-content: center;
+}
+main.player-game .tic-ctn .cell {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem; /* size of X / O */
+}
+main.player-game #reset-btn {
+  margin-top: 2rem;
+}
+
+main.player-game.show {
+  display: flex;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+section.winner-ctn {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: transparent;
+  padding: 0.5rem 1rem;
+}
+section.winner-ctn .nes-balloon {
+  background-color: gold;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  min-width: 600px;
+}
+section.winner-ctn .icon-list {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+section.winner-ctn.show {
+  display: flex;
+  animation: ghost 0.15s ease-in-out forwards;
+}
+
+section.tie-ctn {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: transparent;
+  padding: 0.5rem 1rem;
+}
+section.tie-ctn .nes-balloon {
+  background-color: cornflowerblue;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  min-width: 600px;
+}
+section.tie-ctn .icon-list {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+section.tie-ctn.show {
+  display: flex;
+  animation: ghost 0.15s ease-in-out forwards;
+}
+
+@keyframes ghost {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(20%);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

@@ -16,8 +16,321 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
-    
+
+    <nav>
+        <button class="nes-btn is-success" onclick="toggleReset()">8-Bit Glory Awaits</button>
+    </nav>
+        
+    <header>
+
+        <div class="nes-container with-title is-centered is-rounded">
+            <p class="title nes-text is-primary">Welcome And Take Your Chance In A Game Of Wits</p>
+
+            <section class="icon-list">
+                <i class="nes-icon trophy is-large"></i>
+            </section>
+
+            <h1 class="title-intro ">
+                <section class="icon-list">
+                    <!-- close -->
+                    <i class="nes-icon close is-large"></i>
+                </section>
+                Tic Tac Toe
+                <section class="icon-list">
+                    <!-- close -->
+                    <i class="nes-icon close is-large"></i>
+                </section>
+            </h1>
+
+            <h3 class="nes-text is-error title-choose">Choose Your Mode</h3>
+            
+            <button type="button" onclick="playerMenu()" class="nes-btn is-primary">
+                Player VS Player
+            </button>
+
+            <button type="button" onclick="botMenu()" class="nes-btn is-warning">
+                Player VS Bot
+            </button>
+        </div>
+
+    </header>
+
+    <section class="player-menu">
+
+        <div class="nes-container with-title is-centered is-rounded is-dark">
+            <p class="title nes-text is-primary">Choose your Players</p>
+
+            <div class="player-selection">
+                <div class="nes-container with-title is-centered is-dark">
+                    <p class="title nes-text is-warning player-title">Player 1</p>
+                    <form id="player1">
+
+                        <div style="background-color:#212529; padding: 1rem;" class="nes-field is-inline">
+                            <label for="dark_field" style="color:#fff;">Name</label>
+                            <input required type="text" id="dark_field" name="name" class="player-input nes-input is-dark" placeholder="Mario">
+                        </div>
+
+                        <div style="background-color:#212529; padding: 1rem 1.2rem 1rem 1rem;width:calc(100% + 8px)">
+                            <label for="dark_select" style="color:#fff">Symbol</label>
+                            <div class="nes-select is-dark">
+                                <select required id="dark_select" name="symbol">
+                                    <option value="X" selected>X</option>
+                                    <option value="0">0</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="background-color:#212529; padding: 1rem 1.2rem 1rem 1rem;width:calc(100% + 8px)">
+                            <label for="dark_select" style="color:#fff">Character</label>
+                            <div class="nes-select is-dark">
+                                <select required class="player-avatar" name="avatar" id="dark_select">
+                                    <option value="nes-mario">Mario</option>
+                                    <option value="nes-ash">Ash</option>
+                                    <option value="nes-pokeball">Pokeball</option>
+                                    <option value="nes-kirby" selected>Kirby</option>
+                                    <option value="nes-bulbasaur">Bulbasaur</option>
+                                    <option value="nes-charmander">Charmander</option>
+                                    <option value="nes-squirtle">Squirtle</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <section class="icon-list">
+                            <i class="player-holder nes-kirby"></i>
+                        </section>
+                    </form>
+                </div>
+                <div class="nes-container with-title is-centered is-dark">
+                    <p class="title nes-text is-success player-title2">Player 2</p>
+
+                    <form id="player2">
+
+                        <div style="background-color:#212529; padding: 1rem;" class="nes-field is-inline">
+                            <label for="dark_field" style="color:#fff;">Name</label>
+                            <input required type="text" id="dark_field" name="name" class="nes-input is-dark player-input2" placeholder="John">
+                        </div>
+
+                        <div style="background-color:#212529; padding: 1rem 1.2rem 1rem 1rem;width:calc(100% + 8px)">
+                            <label for="dark_select" style="color:#fff">Symbol</label>
+                            <div class="nes-select is-dark">
+                                <select required id="dark_select" name="symbol">
+                                    <option value="X">X</option>
+                                    <option value="O" selected>O</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="background-color:#212529; padding: 1rem 1.2rem 1rem 1rem;width:calc(100% + 8px)">
+                            <label for="dark_select" style="color:#fff">Character</label>
+                            <div class="nes-select is-dark">
+                                <select required class="player-avatar2" name="avatar" id="dark_select">
+                                    <option value="nes-mario">Mario</option>
+                                    <option value="nes-ash">Ash</option>
+                                    <option value="nes-pokeball">Pokeball</option>
+                                    <option value="nes-kirby">Kirby</option>
+                                    <option value="nes-bulbasaur">Bulbasaur</option>
+                                    <option value="nes-charmander">Charmander</option>
+                                    <option value="nes-squirtle" selected>Squirtle</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <section class="icon-list">
+                            <i class="player-holder2 nes-squirtle"></i>
+                        </section>
+                    </form>
+                </div>
+
+            </div>
+
+            <button id="player-menu-btn" class="nes-btn is-error" style="margin-top: 3rem;">Begin</button>
+        </div>
+    </section>
+
+    <section class="bot-menu">
+
+        <div class="nes-container with-title is-centered is-rounded is-dark">
+            <p class="title nes-text is-primary">Enter Your Details</p>
+
+            <div class="bot-selection">
+                <div class="nes-container with-title is-centered is-dark">
+                    <p class="title nes-text is-warning player-title3">Player 1</p>
+                    <form id="player">
+
+                        <div style="background-color:#212529; padding: 1rem;" class="nes-field is-inline">
+                            <label for="dark_field" style="color:#fff;">Name</label>
+                            <input required type="text" id="dark_field" name="name" class="player-input3 nes-input is-dark" placeholder="Mario">
+                        </div>
+
+                        <div style="background-color:#212529; padding: 1rem 1.2rem 1rem 1rem;width:calc(100% + 8px)">
+                            <label for="dark_select" style="color:#fff">Symbol</label>
+                            <div class="nes-select is-dark">
+                                <select required id="dark_select" name="symbol">
+                                    <option value="X" selected>X</option>
+                                    <option value="0">0</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="background-color:#212529; padding: 1rem 1.2rem 1rem 1rem;width:calc(100% + 8px)">
+                            <label for="dark_select" style="color:#fff">Character</label>
+                            <div class="nes-select is-dark">
+                                <select required class="player-avatar3" name="avatar" id="dark_select">
+                                    <option value="nes-mario" selected>Mario</option>
+                                    <option value="nes-ash">Ash</option>
+                                    <option value="nes-pokeball">Pokeball</option>
+                                    <option value="nes-kirby">Kirby</option>
+                                    <option value="nes-bulbasaur">Bulbasaur</option>
+                                    <option value="nes-charmander">Charmander</option>
+                                    <option value="nes-squirtle">Squirtle</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+                        <section class="icon-list">
+                            <i class="player-holder3 nes-mario"></i>
+                        </section>
+
+                    </form>
+                </div>
+                <div class="nes-container with-title is-centered is-dark">
+                    <p class="title nes-text is-success">The Great Charmander</p>
+
+                    <form id="bot">
+
+                        <div style="background-color:#212529; padding: 1rem;" class="nes-field is-inline">
+                            <label for="dark_field" style="color:#fff;">Name</label>
+                            <input type="text" id="dark_field" name="name" readonly class="nes-input is-dark" value="Charmander" placeholder="Charmander">
+                        </div>
+
+                        <div style="background-color:#212529; padding: 1rem 1.2rem 1rem 1rem;width:calc(100% + 8px)">
+                            <label for="dark_select" style="color:#fff">Symbol</label>
+                            <div class="nes-select is-dark">
+                                <select required id="dark_select" name="symbol">
+                                    <option value="X">X</option>
+                                    <option value="O" selected>0</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <input type="text" value="charmander" hidden name="avatar">
+
+                        <section class="icon-list">
+                            <i class="nes-charmander"></i>
+                        </section>
+                    </form>
+                </div>
+            </div>
+
+            <button id="bot-menu-btn" class="nes-btn is-error" style="margin-top: 3rem;">Begin</button>
+
+        </div>
+    </section>
+
+    <main class="player-game">
+
+        <div class="nes-container with-title is-centered is-rounded">
+            <p class="title nes-text player1-name"></p>
+
+            <p class="nes-badge is-splited "><span class="is-dark">Mark</span><span class="is-primary player1-symbol"></span></p>
+
+            <section class="icon-list">
+                <i class="player1-avatar"></i>
+            </section>
+
+        </div>
+
+        <div class="nes-container with-title is-rounded is-centered">
+            <p class="nes-text is-primary title">Embrace The Glory</p>
+
+            <div class="tic-ctn">
+                <div class="cell nes-container nes-btn nes-pointer is-rounded" data-row="0" data-col="0"></div>
+                <div class="cell nes-container nes-btn nes-pointer is-rounded" data-row="0" data-col="1"></div>
+                <div class="cell nes-container nes-btn nes-pointer is-rounded" data-row="0" data-col="2"></div>
+                <div class="cell nes-container nes-btn nes-pointer is-rounded" data-row="1" data-col="0"></div>
+                <div class="cell nes-container nes-btn nes-pointer is-rounded" data-row="1" data-col="1"></div>
+                <div class="cell nes-container nes-btn nes-pointer is-rounded" data-row="1" data-col="2"></div>
+                <div class="cell nes-container nes-btn nes-pointer is-rounded" data-row="2" data-col="0"></div>
+                <div class="cell nes-container nes-btn nes-pointer is-rounded" data-row="2" data-col="1"></div>
+                <div class="cell nes-container nes-btn nes-pointer is-rounded" data-row="2" data-col="2"></div>
+            </div>
+
+            <button class="nes-btn is-error" id="reset-btn">Reset</button>
+
+        </div>
+
+        <div class="nes-container with-title is-rounded is-centered">
+            <p class="title nes-text player2-name"></p>
+
+            <p class="nes-badge is-splited "><span class="is-dark">Mark</span><span class="is-warning player2-symbol"></span></p>
+
+            <section class="icon-list">
+                <i class="player2-avatar"></i>
+            </section>
+        </div>
+    </main>
+
+    <section class="winner-ctn">
+
+        <section class="icon-list">
+            <!-- star -->
+            <i class="nes-icon is-large star"></i>
+
+            <!-- heart -->
+            <i class="nes-icon is-large heart"></i>
+        </section>
+
+        <p class="nes-balloon from-left nes-pointer">
+            "Glory is yours, {playerName}!"
+        </p>
+
+        <section class="icon-list">
+            <!-- heart -->
+            <i class="nes-icon is-large heart"></i>
+
+            <!-- star -->
+            <i class="nes-icon is-large star"></i>
+        </section>
+
+    </section>
+ 
+
+    <section class="tie-ctn">
+
+        <section class="icon-list">
+            <!-- star -->
+            <i class="nes-icon is-large coin"></i>
+
+            <!-- heart -->
+            <i class="nes-icon is-large heart is-half"></i>
+        </section>
+
+        <p class="nes-balloon from-left nes-pointer">
+            A dramatic draw — both legends stand tall.        
+        </p>
+
+        <section class="icon-list">
+            <!-- heart -->
+            <i class="nes-icon is-large heart is-half"></i>
+
+            <!-- star -->
+            <i class="nes-icon is-large coin is-half"></i>
+        </section>
+
+    </section>
+
+    <footer>
+        <h3 class="nes-text is-primary">Created With 💙 By Zaibbee</h3>
+        <p class="nes-text is-success">Credits</p>
+        <div class="lists">
+            <ul class="nes-list is-disc">
+                <li class="nes-text is-warning">CSS Styling From NES.CSS Framework</li>
+                <li class="nes-text is-warning">Background Image Sourced From Chat GPT</li>
+            </ul>
+        </div>
+    </footer>
     <script src="app.js"></script>
 </body>
 </html>
